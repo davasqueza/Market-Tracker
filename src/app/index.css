@@ -21,3 +21,13 @@ html {
   min-height: 200px;
   max-height: 200px;
 }
+
+/*
+  Footer
+*/
+
+.footer {
+  height: 72px;
+  min-height: 72px;
+  max-height: 72px;
+}

@@ -1,3 +1,94 @@
 .ng-view-container{
   min-height: calc(100vh - 152px);
 }
+
+header {
+  position: relative;
+  padding: 1px 0;
+  height: calc(70vh - 88px);
+  max-height: 517px;
+  overflow: hidden;
+}
+
+.header-image{
+  height: 100%;
+  top: -88px !important;
+  background: #f2f2f2 url('../../assets/images/header-background.jpg') no-repeat fixed top left;
+}
+
+.header-map {
+  position: absolute;
+  top: 50%; /* IE 9 */
+  -webkit-transform: translateY(-50%); /* Chrome, Safari, Opera */
+  transform: translateY(-50%);
+  width: 60%;
+  height: 100%;
+  background: url(../../assets/images/header-map.png) no-repeat center;
+  background-size: contain;
+}
+
+header .intro-content {
+  position: absolute;
+  width: 30%;
+  text-align: right;
+  top: 50%; /* IE 9 */
+  -webkit-transform: translateY(-50%); /* Chrome, Safari, Opera */
+  transform: translateY(-50%);
+  right: 10%;
+}
+
+header hr {
+  border-color: #0c58a6;
+}
+
+header .main-title {
+  color: #737373;
+}
+
+header .sub-title {
+  color: #2d2d2d;
+}
+
+
+@media (max-width: 768px) {
+  .header-image{
+    background: #f2f2f2 url('../../assets/images/header-background-tablet.jpg') no-repeat fixed top left;
+  }
+  header .intro-content {
+    width: 35%;
+    right: 5%;
+  }
+}
+
+@media (max-width: 425px) {
+  .header-image{
+    background: #f2f2f2 url('../../assets/images/header-background-mobile.jpg') no-repeat fixed top left;
+  }
+  header {
+    height: calc(100vh - 88px);
+  }
+
+  header .intro-content {
+    width: 90%;
+    right: 5%;
+    left: 5%;
+    top: 120px;
+    text-align: center;
+  }
+
+  .header-map {
+    width: 100%;
+    background: url(../../assets/images/header-map-mobile.png) no-repeat;
+    background-position-y: 80%;
+    background-size: contain;
+  }
+
+  header .main-title {
+    font-size: 28px;
+  }
+
+  header .sub-title {
+    font-size: 20px;
+  }
+
+}

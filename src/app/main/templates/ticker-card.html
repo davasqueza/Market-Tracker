@@ -1,0 +1,30 @@
+<md-card class="ticker-card">
+  <md-card-content>
+    <div class="header">
+      <div class="ticker" md-whiteframe="2">
+        <b>
+          <md-icon md-svg-icon="chart"></md-icon>
+          {{tickerData.name}}
+        </b>
+      </div>
+    </div>
+    <div class="image">
+      <canvas
+        class="chart chart-line"
+        chart-data="tickerData.history.data"
+        chart-labels="tickerData.history.label"
+        chart-series="tickerData.history.serie">
+      </canvas>
+    </div>
+    <div layout="row" layout-align="space-between center">
+      <b>
+        <md-icon md-svg-icon="business"></md-icon>
+        {{tickerData.company}}
+      </b>
+
+      <md-button class="md-fab md-primary" aria-label="Comparar" ng-click="vm.addToCompare(tickerData)">
+        <md-icon md-svg-icon="compare"></md-icon>
+      </md-button>
+    </div>
+  </md-card-content>
+</md-card>

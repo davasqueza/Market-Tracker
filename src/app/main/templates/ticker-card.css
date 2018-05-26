@@ -1,0 +1,12 @@
+.ticker-card .title{
+  font-size: 18px;
+  color: #000;
+  margin: 5px 0 5px 0;
+}
+
+.ticker-card .ticker {
+  position: absolute;
+  padding: 8px 15px;
+  background-color: #fff;
+  z-index: 2;
+}

@@ -1,0 +1,33 @@
+<md-dialog aria-label="analizar acciones">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Analizar acciones</h2>
+    </div>
+  </md-toolbar>
+  <form name="analizeForm" novalidate ng-submit="analizeForm.$valid && vm.compare()">
+    <md-dialog-content style="max-width: 500px;">
+      <md-content class="md-padding">
+        <p>Para inicial el análisis de las acciones que seleccionaste por favor ingresa un rango de fechas a analizar</p>
+
+        <br>
+
+        <div layout="row">
+          <md-input-container  class="md-block">
+            <label>Fecha inicial</label>
+            <md-datepicker ng-model="vm.fromDate" md-max-date="vm.toDate" ng-required></md-datepicker>
+          </md-input-container>
+
+          <md-input-container  class="md-block">
+            <label>Fecha final</label>
+            <md-datepicker ng-model="vm.toDate" md-min-date="vm.fromDate" ng-required></md-datepicker>
+          </md-input-container>
+        </div>
+        <md-input-container layout="column" layout-align="center center">
+          <md-button class="md-primary md-raised" type="submit">
+            Analizar
+          </md-button>
+        </md-input-container>
+      </md-content>
+    </md-dialog-content>
+  </form>
+</md-dialog>

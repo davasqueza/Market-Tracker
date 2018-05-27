@@ -18,10 +18,7 @@
     <div class="landing-cards-group">
       <div layout="row" layout-align="center" layout-wrap>
         <div ng-repeat="tickerData in vm.tickersHistory" flex-gt-sm="33" flex-gt-xs="50" flex-xs="100">
-          <a
-            ng-include="'app/main/templates/ticker-card.html'"
-            class="disable-hyperlinks-style"
-          ></a>
+          <a ng-include="'app/main/templates/ticker-card.html'"></a>
         </div>
       </div>
     </div>
@@ -47,7 +44,7 @@
         </md-card-content>
       </md-card>
     </div>
-    <md-button class="md-primary md-raised" ng-click="vm.compare()" ng-disabled="vm.selectedTickers.length < 3">
+    <md-button class="md-primary md-raised" ng-click="vm.compareStocks($event)" ng-disabled="vm.selectedTickers.length < 3">
       Comparar
     </md-button>
   </div>

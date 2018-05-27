@@ -1,0 +1,22 @@
+<md-content>
+
+  <h1>Análisis de acciones</h1>
+
+  <div layout="column" layout-align="center center">
+    <div class="landing-cards-group">
+      <div layout="row" layout-align="center" layout-wrap>
+        <div ng-repeat="tickerData in vm.tickersHistory" flex-gt-sm="33" flex-gt-xs="50" flex-xs="100">
+          <a ng-include="'app/main/templates/ticker-card-detailed.html'"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <md-card>
+    <md-card-content>
+      La acción con mejor probabilidad de rendimientos al día {{vm.toDate | date}} es <b>{{vm.bestOption.ticker.company}}</b>,
+      con una ganancia de <b>{{vm.bestOption.gain | currency}}</b>
+    </md-card-content>
+  </md-card>
+
+</md-content>

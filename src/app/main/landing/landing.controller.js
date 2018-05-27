@@ -6,11 +6,12 @@
     .controller('LandingController', LandingController);
 
   /** @ngInject */
-  function LandingController(MainService, toastr, $log) {
+  function LandingController(MainService, toastr, $log, $mdDialog, $location) {
     var vm = this;
 
     vm.addToCompare = addToCompare;
     vm.selectedTickers = [];
+    vm.compareStocks = compareStocks;
 
     function loadTickers() {
       MainService.getTickerList()
@@ -39,7 +40,7 @@
             .map(function (tickerHistory, tickerName) {
               var tickerDetail = {};
               tickerDetail.history = processHistoryData(tickerHistory);
-              tickerDetail.name = tickerName;
+              tickerDetail.ticker = tickerName;
               tickerDetail.company = getCompanyByTicker(tickerName);
 
               return tickerDetail
@@ -79,6 +80,41 @@
         vm.selectedTickers.shift();
       }
       vm.selectedTickers.push(tickerData);
+    }
+
+    function compareStocks(ev) {
+      $mdDialog.show({
+        controller: DialogController,
+        controllerAs: 'vm',
+        templateUrl: 'app/main/templates/analyze-stock.html',
+        targetEvent: ev,
+        allowClose:false,
+        clickOutsideToClose: false
+      }).then(function (dateRange) {
+        var search = {
+          tickers: _.map(vm.selectedTickers, _.property("ticker")).join(),
+          toDate: dateRange.toDate.getTime(),
+          fromDate: dateRange.fromDate.getTime()
+        };
+
+        $location.url("/analyze");
+        $location.search(search);
+      });
+    }
+
+    function DialogController($mdDialog) {
+      var vm = this;
+
+      vm.compare = compare;
+      vm.toDate = new Date();
+      vm.fromDate = new Date(new Date().setFullYear(vm.toDate.getFullYear() - 1));
+
+      function compare() {
+        $mdDialog.hide({
+          toDate: vm.toDate,
+          fromDate: vm.fromDate
+        });
+      }
     }
 
     loadTickers();

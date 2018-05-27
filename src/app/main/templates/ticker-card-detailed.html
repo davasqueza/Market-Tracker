@@ -1,0 +1,50 @@
+<md-card class="ticker-card">
+  <md-card-content>
+    <div class="header">
+      <div class="ticker" md-whiteframe="2">
+        <b>
+          <md-icon md-svg-icon="chart"></md-icon>
+          {{tickerData.ticker}}
+        </b>
+      </div>
+    </div>
+    <div class="image">
+      <canvas
+        class="chart chart-line"
+        chart-data="tickerData.history.data"
+        chart-labels="tickerData.history.label"
+        chart-series="tickerData.history.serie">
+      </canvas>
+    </div>
+    <div class="analysis-description" layout="column">
+      <b>
+        <md-icon md-svg-icon="business"></md-icon>
+        {{tickerData.company}}
+      </b>
+      <span>
+        <b>Valor actual: </b> {{tickerData.history.data[0][tickerData.history.data[0].length-1] | currency}}
+      </span>
+      <span>
+        <b>Desviación estándar: </b> {{tickerData.analysis.standardDeviation | currency}}
+      </span>
+      <span>
+        <b>Probabilidad de tendencia alcista: </b> {{tickerData.analysis.bullishProbability}}%
+      </span>
+      <span>
+        <b>Probabilidad de tendencia lateral: </b> {{tickerData.analysis.lateralProbability}}%
+      </span>
+      <span>
+        <b>Probabilidad de tendencia bajista: </b> {{tickerData.analysis.bearishProbability}}%
+      </span>
+      <span>
+        <b>Valor en tendencia alcista: </b> {{tickerData.analysis.bullishValue | currency}}
+      </span>
+      <span>
+        <b>Valor en tendencia lateral: </b> {{tickerData.analysis.lateralValue | currency}}
+      </span>
+      <span>
+        <b>Valor en tendencia bajista: </b> {{tickerData.analysis.bearishValue | currency}}
+      </span>
+    </div>
+  </md-card-content>
+</md-card>

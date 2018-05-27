@@ -13,6 +13,9 @@
     vm.selectedTickers = [];
     vm.compareStocks = compareStocks;
 
+    /**
+     * Load the list of available tickers data
+     */
     function loadTickers() {
       MainService.getTickerList()
         .then(function (tickers) {
@@ -26,6 +29,10 @@
         });
     }
 
+    /**
+     * Loads historical prices value from a random sample of tickers
+     * @param tickers - List of tickers
+     */
     function loadTickersHistory(tickers) {
       var tickerSample = _.sample(tickers, 10);
 
@@ -34,18 +41,7 @@
 
       MainService.getTickersHistory(tickerSample, fromDate, toDate)
         .then(function (queryResult) {
-          vm.tickersHistory = _
-            .chain(queryResult.datatable.data)
-            .groupBy(_.first)
-            .map(function (tickerHistory, tickerName) {
-              var tickerDetail = {};
-              tickerDetail.history = processHistoryData(tickerHistory);
-              tickerDetail.ticker = tickerName;
-              tickerDetail.company = getCompanyByTicker(tickerName);
-
-              return tickerDetail
-            })
-            .value();
+          vm.tickersHistory = processTickersData(queryResult);
         })
         .catch(function (err) {
           toastr.warning("Hubo un error al cargar el historial de precios de los códigos bursátiles, inténtelo más tarde");
@@ -53,6 +49,30 @@
         });
     }
 
+    /**
+     * Process the data for render on charts
+     * @param queryResult - Data retrieved from Quandl
+     */
+    function processTickersData(queryResult) {
+      return _
+        .chain(queryResult.datatable.data)
+        .groupBy(_.first)
+        .map(function (tickerHistory, tickerName) {
+          var tickerDetail = {};
+          tickerDetail.history = processHistoryData(tickerHistory);
+          tickerDetail.ticker = tickerName;
+          tickerDetail.company = getCompanyByTicker(tickerName);
+
+          return tickerDetail
+        })
+        .value();
+    }
+
+    /**
+     * Search the company data associated with a ticker name
+     * @param ticker - Name of the ticker
+     * @returns {Object} Company data
+     */
     function getCompanyByTicker(ticker) {
       var tickerData = _.find(vm.tickers, function (tickerData) {
         return tickerData.ticker === ticker;
@@ -61,6 +81,11 @@
       return tickerData ? tickerData.company : ticker;
     }
 
+    /**
+     * Process a list of historical prices for render on a chart
+     * @param history - List of historical prices
+     * @returns {Object} Processed list of prices
+     */
     function processHistoryData(history) {
       var processedHistory = {};
 
@@ -75,6 +100,10 @@
       return processedHistory;
     }
 
+    /**
+     * Add a ticker to the comparison list
+     * @param tickerData - Ticker to add
+     */
     function addToCompare(tickerData) {
       if(vm.selectedTickers.length === 3){
         vm.selectedTickers.shift();
@@ -82,6 +111,10 @@
       vm.selectedTickers.push(tickerData);
     }
 
+    /**
+     * Open a modal to retrieve a range of dates for initialize
+     * @param ev
+     */
     function compareStocks(ev) {
       $mdDialog.show({
         controller: DialogController,
@@ -102,6 +135,11 @@
       });
     }
 
+    /**
+     * Controller for compare stocks dialog
+     * @param $mdDialog - mdDialog Service
+     * @constructor
+     */
     function DialogController($mdDialog) {
       var vm = this;
 

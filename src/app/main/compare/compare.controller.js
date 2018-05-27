@@ -9,6 +9,9 @@
   function CompareController(MainService, $location, $log, toastr) {
     var vm = this;
 
+    /**
+     * Reads from URL the compare parameters and initialize the loading of historical data
+     */
     function readCompareParameters() {
       var parameters = $location.search();
       var tickersSelected = _.map(parameters.tickers.split(","), function (ticker) {
@@ -29,6 +32,12 @@
         });
     }
 
+    /**
+     * Load historical price data from selected tickers
+     * @param tickers - List of selected tickers
+     * @param fromDate - Date of initial date range
+     * @param toDate - Date of final date range
+     */
     function loadSelectedTickersHistory(tickers, fromDate, toDate) {
       MainService.getTickersHistory(tickers, fromDate, toDate)
         .then(function (queryResult) {
@@ -53,6 +62,11 @@
         });
     }
 
+    /**
+     * Search the company data associated with a ticker name
+     * @param ticker - Name of the ticker
+     * @returns {Object} Company data
+     */
     function getCompanyByTicker(ticker) {
       var tickerData = _.find(vm.tickers, function (tickerData) {
         return tickerData.ticker === ticker;
@@ -61,6 +75,11 @@
       return tickerData ? tickerData.company : ticker;
     }
 
+    /**
+     * Process a list of historical prices for render on a chart
+     * @param history - List of historical prices
+     * @returns {Object} Processed list of prices
+     */
     function processHistoryData(history) {
       var processedHistory = {};
 
@@ -75,6 +94,10 @@
       return processedHistory;
     }
 
+    /**
+     * Process historical price data to calculate trend probability
+     * @param tickersHistory
+     */
     function analyzeTickers(tickersHistory) {
 
       vm.tickersHistory = _.map(tickersHistory, function (tickerData) {
@@ -96,35 +119,70 @@
       calculateBestChoice(vm.tickersHistory);
     }
 
+    /**
+     * Compute the standard deviation for the historical prices
+     * @param valueHistory - Prices historical
+     * @returns {number} standard deviation of the dataset
+     */
     function calculateStandardDeviation(valueHistory){
       return math.std(valueHistory);
     }
 
+    /**
+     * Compute the bullish probability for the historical prices
+     * @param valueHistory - Prices historical
+     * @returns {number} bullish probability of the dataset
+     */
     function calculateBullishProbability(valueHistory){
       //TODO: calculate BullishProbability
       return 60;
     }
 
+    /**
+     * Compute the lateral probability for the historical prices
+     * @param valueHistory - Prices historical
+     * @returns {number} lateral probability of the dataset
+     */
     function calculateLateralProbability(valueHistory){
       //TODO: calculate LateralProbability
       return 15;
     }
 
+    /**
+     * Compute the bearish probability for the historical prices
+     * @param valueHistory - Prices historical
+     * @returns {number} bearish probability of the dataset
+     */
     function calculateBearishProbability(valueHistory){
       //TODO: calculate BearishProbability
       return 25;
     }
 
+    /**
+     * Compute the bullish value for the historical prices
+     * @param valueHistory - Prices historical
+     * @returns {number} bullish value of the dataset
+     */
     function calculateBullishValue(valueHistory){
       //TODO: calculate BullishValue
       return valueHistory[valueHistory.length - 1] + _.random(5,10);
     }
 
+    /**
+     * Compute the lateral value for the historical prices
+     * @param valueHistory - Prices historical
+     * @returns {number} lateral value of the dataset
+     */
     function calculateLateralValue(valueHistory){
       //TODO: calculate LateralValue
       return valueHistory[valueHistory.length - 1];
     }
 
+    /**
+     * Compute the bearish value for the historical prices
+     * @param valueHistory - Prices historical
+     * @returns {number} bearish value of the dataset
+     */
     function calculateBearishValue(valueHistory){
       //TODO: calculate BearishValue
       return valueHistory[valueHistory.length - 1] - _.random(5,10);

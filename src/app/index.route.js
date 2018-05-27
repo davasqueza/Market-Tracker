@@ -5,7 +5,7 @@
     .module('App')
     .config(routeConfig);
 
-  function routeConfig($routeProvider, $locationProvider) {
+  function routeConfig($routeProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'app/main/landing/landing.html',
@@ -20,8 +20,6 @@
       .otherwise({
         redirectTo: '/'
       });
-
-    $locationProvider.html5Mode(true);
   }
 
 })();

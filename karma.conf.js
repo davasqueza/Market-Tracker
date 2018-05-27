@@ -50,7 +50,7 @@ module.exports = function(config) {
 
     ngHtml2JsPreprocessor: {
       stripPrefix: conf.paths.src + '/',
-      moduleName: 'MercadoniChallenge'
+      moduleName: 'App'
     },
 
     logLevel: 'WARN',

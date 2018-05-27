@@ -28,19 +28,13 @@
         <b>Desviación estándar: </b> {{tickerData.analysis.standardDeviation | currency}}
       </span>
       <span>
-        <b>Probabilidad de tendencia alcista: </b> {{tickerData.analysis.bullishProbability}}%
+        <b>Probabilidad de tendencia alcista: </b> {{tickerData.analysis.bullishProbability * 100 | number:2}}%
       </span>
       <span>
-        <b>Probabilidad de tendencia lateral: </b> {{tickerData.analysis.lateralProbability}}%
-      </span>
-      <span>
-        <b>Probabilidad de tendencia bajista: </b> {{tickerData.analysis.bearishProbability}}%
+        <b>Probabilidad de tendencia bajista: </b> {{tickerData.analysis.bearishProbability * 100 | number:2}}%
       </span>
       <span>
         <b>Valor en tendencia alcista: </b> {{tickerData.analysis.bullishValue | currency}}
-      </span>
-      <span>
-        <b>Valor en tendencia lateral: </b> {{tickerData.analysis.lateralValue | currency}}
       </span>
       <span>
         <b>Valor en tendencia bajista: </b> {{tickerData.analysis.bearishValue | currency}}

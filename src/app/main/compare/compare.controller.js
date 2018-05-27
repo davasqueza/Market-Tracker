@@ -105,13 +105,11 @@
 
         tickerData.analysis = {};
         tickerData.analysis.currentValue = valueHistory[valueHistory.length - 1];
-        tickerData.analysis.standardDeviation = calculateStandardDeviation(valueHistory);
-        tickerData.analysis.bullishProbability = calculateBullishProbability(valueHistory);
-        tickerData.analysis.lateralProbability = calculateLateralProbability(valueHistory);
-        tickerData.analysis.bearishProbability = calculateBearishProbability(valueHistory);
-        tickerData.analysis.bullishValue = calculateBullishValue(valueHistory);
-        tickerData.analysis.lateralValue = calculateLateralValue(valueHistory);
-        tickerData.analysis.bearishValue = calculateBearishValue(valueHistory);
+        tickerData.analysis.standardDeviation = calculateStandardDeviation(tickerData);
+        tickerData.analysis.bearishProbability = calculateBearishProbability(tickerData);
+        tickerData.analysis.bullishProbability = calculateBullishProbability(tickerData);
+        tickerData.analysis.bearishValue = calculateBearishValue(tickerData);
+        tickerData.analysis.bullishValue = calculateBullishValue(tickerData);
 
         return tickerData;
       });
@@ -121,71 +119,64 @@
 
     /**
      * Compute the standard deviation for the historical prices
-     * @param valueHistory - Prices historical
+     * @param tickerData - Data of the ticker
      * @returns {number} standard deviation of the dataset
      */
-    function calculateStandardDeviation(valueHistory){
+    function calculateStandardDeviation(tickerData){
+      var valueHistory = tickerData.history.data[0];
       return math.std(valueHistory);
     }
 
     /**
-     * Compute the bullish probability for the historical prices
-     * @param valueHistory - Prices historical
-     * @returns {number} bullish probability of the dataset
-     */
-    function calculateBullishProbability(valueHistory){
-      //TODO: calculate BullishProbability
-      return 60;
-    }
-
-    /**
-     * Compute the lateral probability for the historical prices
-     * @param valueHistory - Prices historical
-     * @returns {number} lateral probability of the dataset
-     */
-    function calculateLateralProbability(valueHistory){
-      //TODO: calculate LateralProbability
-      return 15;
-    }
-
-    /**
      * Compute the bearish probability for the historical prices
-     * @param valueHistory - Prices historical
+     * @param tickerData - Data of the ticker
      * @returns {number} bearish probability of the dataset
      */
-    function calculateBearishProbability(valueHistory){
-      //TODO: calculate BearishProbability
-      return 25;
+    function calculateBearishProbability(tickerData){
+      var valueHistory = tickerData.history.data[0];
+      var currentValue = tickerData.analysis.currentValue;
+      var mean = math.mean(valueHistory);
+      var standardDeviation = tickerData.analysis.standardDeviation;
+
+      return computeCumulativeDistribution(currentValue, mean, standardDeviation);
+    }
+
+    /**
+     * Compute the bullish probability for the historical prices
+     * @param tickerData - Data of the ticker
+     * @returns {number} bullish probability of the dataset
+     */
+    function calculateBullishProbability(tickerData){
+      return 1 - tickerData.analysis.bearishProbability;
     }
 
     /**
      * Compute the bullish value for the historical prices
-     * @param valueHistory - Prices historical
+     * @param tickerData - Data of the ticker
      * @returns {number} bullish value of the dataset
      */
-    function calculateBullishValue(valueHistory){
-      //TODO: calculate BullishValue
-      return valueHistory[valueHistory.length - 1] + _.random(5,10);
-    }
-
-    /**
-     * Compute the lateral value for the historical prices
-     * @param valueHistory - Prices historical
-     * @returns {number} lateral value of the dataset
-     */
-    function calculateLateralValue(valueHistory){
-      //TODO: calculate LateralValue
-      return valueHistory[valueHistory.length - 1];
+    function calculateBullishValue(tickerData){
+      return tickerData.analysis.currentValue + tickerData.analysis.standardDeviation;
     }
 
     /**
      * Compute the bearish value for the historical prices
-     * @param valueHistory - Prices historical
+     * @param tickerData - Data of the ticker
      * @returns {number} bearish value of the dataset
      */
-    function calculateBearishValue(valueHistory){
-      //TODO: calculate BearishValue
-      return valueHistory[valueHistory.length - 1] - _.random(5,10);
+    function calculateBearishValue(tickerData){
+      return tickerData.analysis.currentValue - tickerData.analysis.standardDeviation;
+    }
+
+    /**
+     * compute cumulative distribution, based on https://stackoverflow.com/a/41638885
+     * @param x - value to compute if will take a value less than or equal
+     * @param mean - mean of the dataset
+     * @param standardDeviation - standard deviation of the dataset
+     * @returns {number}
+     */
+    function computeCumulativeDistribution(x, mean, standardDeviation) {
+      return (1 - math.erf((mean - x ) / (Math.sqrt(2) * standardDeviation))) / 2;
     }
 
     /**
@@ -199,14 +190,12 @@
       _.each(tickers, function (tickerData) {
         var currentValue = tickerData.analysis.currentValue;
         var bullishValueDelta = tickerData.analysis.bullishValue - currentValue;
-        var lateralValueDelta = tickerData.analysis.lateralValue - currentValue;
         var bearishValueDelta = tickerData.analysis.bearishValue - currentValue;
 
-        var bullishGain = bullishValueDelta * (tickerData.analysis.bullishProbability / 100);
-        var lateralGain = lateralValueDelta * (tickerData.analysis.lateralProbability / 100);
-        var bearishGain = bearishValueDelta * (tickerData.analysis.bearishProbability / 100);
+        var bullishGain = bullishValueDelta * tickerData.analysis.bullishProbability;
+        var bearishGain = bearishValueDelta * tickerData.analysis.bearishProbability;
 
-        var optionGain = bullishGain + lateralGain + bearishGain;
+        var optionGain = bullishGain + bearishGain;
 
         gainValue.push(optionGain);
       });

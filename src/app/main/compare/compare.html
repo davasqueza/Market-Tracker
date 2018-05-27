@@ -14,9 +14,11 @@
 
   <md-card>
     <md-card-content>
-      La acción con mejor probabilidad de rendimientos al día {{vm.toDate | date}} es <b>{{vm.bestOption.ticker.company}}</b>,
+      La acción con mejor probabilidad de rendimientos es <b>{{vm.bestOption.ticker.company}}</b>,
       con una ganancia de <b>{{vm.bestOption.gain | currency}}</b>
     </md-card-content>
   </md-card>
+
+  <md-button class="md-raised md-primary" href="/">Volver</md-button>
 
 </md-content>
